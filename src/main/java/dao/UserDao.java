@@ -1,0 +1,83 @@
+package dao;
+
+import helper.executor.Executor;
+import model.User;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+
+public class UserDao extends AbstractDao<User> {
+
+    public UserDao(Connection conn) {
+        super(conn);
+    }
+
+    @Override
+    public int insert(User user) throws SQLException {
+        String sql = String.format("INSERT INTO `user` (`login`, `email`, `password`) VALUES ('%s', '%s', '%s')",
+                user.getLogin(), user.getEmail(), user.getPassword());
+
+        return Executor.execUpdate(conn, sql);
+    }
+
+    @Override
+    public User get(long id) throws SQLException {
+        String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `id` = %d", id);
+
+        return Executor.execQuery(conn, sql, (resultSet) -> {
+            if (resultSet.next()) {
+                return new User(
+                        resultSet.getLong("id"),
+                        resultSet.getString("login"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password")
+                );
+            }
+
+            return new User(-1, "", "", "");
+        });
+    }
+
+    @Override
+    public List<User> getList() throws SQLException {
+        String sql = "SELECT `id`, `login`, `email`, `password` FROM `user`";
+
+        return Executor.execQuery(conn, sql, (resultSet) -> {
+            List<User> users = new LinkedList<>();
+
+            while (resultSet.next()) {
+                users.add(new User(
+                        resultSet.getLong("id"),
+                        resultSet.getString("login"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password")
+                ));
+            }
+
+            return users;
+        });
+    }
+
+    @Override
+    public int delete(long id) throws SQLException {
+        String sql = String.format("DELETE FROM `user` WHERE `id` = %d", id);
+        return Executor.execUpdate(conn, sql);
+    }
+
+    public int updateLogin(long id, String login) throws SQLException {
+        String sql = String.format("UPDATE `user` SET `login` = '%s' WHERE `id` = %d", login, id);
+        return Executor.execUpdate(conn, sql);
+    }
+
+    public int updateEmail(long id, String email) throws SQLException {
+        String sql = String.format("UPDATE `user` SET `email` = '%s' WHERE `id` = %d", email, id);
+        return Executor.execUpdate(conn, sql);
+    }
+
+    public int updatePassword(long id, String password) throws SQLException {
+        String sql = String.format("UPDATE `user` SET `password` = '%s' WHERE `id` = %d", password, id);
+        return Executor.execUpdate(conn, sql);
+    }
+}
