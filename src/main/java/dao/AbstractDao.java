@@ -1,30 +1,76 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class AbstractDao<T> {
+/**
+ * Defines common CRUD methods.
+ *
+ * @param <T> using DataSet class
+ */
+public interface AbstractDao<T> {
 
-    protected Connection conn;
-
-    public AbstractDao(Connection conn) {
-        this.conn = conn;
-    }
-
-    public int insert(T dataSet) throws SQLException {
+    /**
+     * Create-method.
+     * Inserts a data set object into a table.
+     * Is unsupported by default.
+     *
+     * @param dataSet
+     * @return id of the inserted data set object
+     * @throws SQLException
+     */
+    default long insert(T dataSet) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public T get(long id) throws SQLException {
+    /**
+     * Read-method.
+     * Returns the data set object by id from the table.
+     * Is unsupported by default.
+     *
+     * @param id
+     * @return data set object matched with the id
+     * @throws SQLException
+     */
+    default T get(long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public List<T> getList() throws SQLException {
+    /**
+     * Read-method.
+     * Returns a list of data set objects from the table.
+     * Is unsupported by default.
+     *
+     * @return a list of data set objects
+     * @throws SQLException
+     */
+    default List<T> getList() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int delete(long id) throws SQLException {
+    /**
+     * Update-method.
+     * Updates a row in the table with assigned data set object by its id.
+     * Is unsupported by default.
+     *
+     * @param dataSet
+     * @return affected rows count
+     * @throws SQLException
+     */
+    default int update(T dataSet) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Delete-method.
+     * Deletes a row from the table by id.
+     * Is unsupported by default.
+     *
+     * @param id
+     * @return affected rows count
+     * @throws SQLException
+     */
+    default int delete(long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 }
