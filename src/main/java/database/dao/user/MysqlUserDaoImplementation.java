@@ -1,7 +1,7 @@
 package database.dao.user;
 
 import helper.executor.Executor;
-import model.User;
+import database.dataset.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
