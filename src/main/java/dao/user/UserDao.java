@@ -1,83 +1,62 @@
-package dao;
+package dao.user;
 
-import helper.executor.Executor;
+import dao.AbstractDao;
 import model.User;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
-public class UserDao extends AbstractDao<User> {
-
-    public UserDao(Connection conn) {
-        super(conn);
-    }
-
-    @Override
-    public int insert(User user) throws SQLException {
-        String sql = String.format("INSERT INTO `user` (`login`, `email`, `password`) VALUES ('%s', '%s', '%s')",
-                user.getLogin(), user.getEmail(), user.getPassword());
-
-        return Executor.execUpdate(conn, sql);
-    }
+/**
+ * Takes needed common CRUD methods from AbstractDao by overriding.
+ * Defines specific CRUD methods for User data set
+ */
+public interface UserDao extends AbstractDao<User> {
 
     @Override
-    public User get(long id) throws SQLException {
-        String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `id` = %d", id);
-
-        return Executor.execQuery(conn, sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                );
-            }
-
-            return new User(-1, "", "", "");
-        });
-    }
+    long insert(User user) throws SQLException;
 
     @Override
-    public List<User> getList() throws SQLException {
-        String sql = "SELECT `id`, `login`, `email`, `password` FROM `user`";
-
-        return Executor.execQuery(conn, sql, (resultSet) -> {
-            List<User> users = new LinkedList<>();
-
-            while (resultSet.next()) {
-                users.add(new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                ));
-            }
-
-            return users;
-        });
-    }
+    User get(long id) throws SQLException;
 
     @Override
-    public int delete(long id) throws SQLException {
-        String sql = String.format("DELETE FROM `user` WHERE `id` = %d", id);
-        return Executor.execUpdate(conn, sql);
-    }
+    List<User> getList() throws SQLException;
 
-    public int updateLogin(long id, String login) throws SQLException {
-        String sql = String.format("UPDATE `user` SET `login` = '%s' WHERE `id` = %d", login, id);
-        return Executor.execUpdate(conn, sql);
-    }
+    @Override
+    int update(User user) throws SQLException;
 
-    public int updateEmail(long id, String email) throws SQLException {
-        String sql = String.format("UPDATE `user` SET `email` = '%s' WHERE `id` = %d", email, id);
-        return Executor.execUpdate(conn, sql);
-    }
+    @Override
+    int delete(long id) throws SQLException;
 
-    public int updatePassword(long id, String password) throws SQLException {
-        String sql = String.format("UPDATE `user` SET `password` = '%s' WHERE `id` = %d", password, id);
-        return Executor.execUpdate(conn, sql);
-    }
+    /**
+     * Update-method.
+     * Sets the new login value by the user id.
+     *
+     * @param id user id
+     * @param login new login value
+     * @return affected rows count
+     * @throws SQLException
+     */
+    int updateLogin(long id, String login) throws SQLException;
+
+    /**
+     * Update-method.
+     * Sets the new email value by the user id.
+     *
+     * @param id user id
+     * @param email new email value
+     * @return affected rows count
+     * @throws SQLException
+     */
+    int updateEmail(long id, String email) throws SQLException;
+
+    /**
+     * Update-method.
+     * Sets the new password value by the user id.
+     *
+     * @param id user id
+     * @param password new password value
+     * @return affected rows count
+     * @throws SQLException
+     */
+    int updatePassword(long id, String password) throws SQLException;
 }
