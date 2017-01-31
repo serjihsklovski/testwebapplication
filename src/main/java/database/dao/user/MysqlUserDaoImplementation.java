@@ -1,4 +1,4 @@
-package dao.user;
+package database.dao.user;
 
 import helper.executor.Executor;
 import model.User;

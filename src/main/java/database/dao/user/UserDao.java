@@ -1,6 +1,6 @@
-package dao.user;
+package database.dao.user;
 
-import dao.AbstractDao;
+import database.dao.AbstractDao;
 import model.User;
 
 import java.sql.SQLException;
