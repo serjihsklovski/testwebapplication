@@ -13,6 +13,12 @@ import java.util.List;
 public interface UserDao extends AbstractDao<User> {
 
     @Override
+    void createTableIfNotExists() throws SQLException;
+
+    @Override
+    void dropTableIfExists() throws SQLException;
+
+    @Override
     long insert(User user) throws SQLException;
 
     @Override
