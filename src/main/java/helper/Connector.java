@@ -1,6 +1,5 @@
 package helper;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -11,11 +10,11 @@ public final class Connector {
     private static Connection connection;
 
     public static Connection getConnection() {
-        if (connection != null) {
-            return connection;
-        }
-
         try {
+            if (connection != null && !connection.isClosed()) {
+                return connection;
+            }
+
             Driver driver = (Driver) Class.forName(ServiceProperties.getInstance().getJdbcDriverClassName()).newInstance();
             DriverManager.registerDriver(driver);
             connection = DriverManager.getConnection(ServiceProperties.getInstance().getConnectionUrl());
