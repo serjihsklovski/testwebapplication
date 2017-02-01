@@ -1,6 +1,5 @@
 package database.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,18 +12,18 @@ public interface AbstractDao<T> {
     /**
      * Creates the table related with dao if it does not exist.
      *
-     * @throws SQLException
+     * @throws DaoException
      */
-    default void createTableIfNotExists() throws SQLException {
+    default void createTableIfNotExists() throws DaoException {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Drops the table related with dao if it exist.
      *
-     * @throws SQLException
+     * @throws DaoException
      */
-    default void dropTableIfExists() throws SQLException {
+    default void dropTableIfExists() throws DaoException {
         throw new UnsupportedOperationException();
     }
 
@@ -35,9 +34,9 @@ public interface AbstractDao<T> {
      *
      * @param dataSet
      * @return id of the inserted data set object
-     * @throws SQLException
+     * @throws DaoException
      */
-    default long insert(T dataSet) throws SQLException {
+    default long insert(T dataSet) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
@@ -48,9 +47,9 @@ public interface AbstractDao<T> {
      *
      * @param id
      * @return data set object matched with the id
-     * @throws SQLException
+     * @throws DaoException
      */
-    default T get(long id) throws SQLException {
+    default T get(long id) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
@@ -60,9 +59,9 @@ public interface AbstractDao<T> {
      * Is unsupported by default.
      *
      * @return a list of data set objects
-     * @throws SQLException
+     * @throws DaoException
      */
-    default List<T> getList() throws SQLException {
+    default List<T> getList() throws DaoException {
         throw new UnsupportedOperationException();
     }
 
@@ -72,10 +71,10 @@ public interface AbstractDao<T> {
      * Is unsupported by default.
      *
      * @param dataSet
-     * @return affected rows count
-     * @throws SQLException
+     * @return was the operation successful?
+     * @throws DaoException
      */
-    default int update(T dataSet) throws SQLException {
+    default boolean update(T dataSet) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
@@ -85,10 +84,10 @@ public interface AbstractDao<T> {
      * Is unsupported by default.
      *
      * @param id
-     * @return affected rows count
-     * @throws SQLException
+     * @return was the operation successful?
+     * @throws DaoException
      */
-    default int delete(long id) throws SQLException {
+    default boolean delete(long id) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }
