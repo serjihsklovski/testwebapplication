@@ -11,6 +11,24 @@ import java.util.List;
 public interface AbstractDao<T> {
 
     /**
+     * Creates the table related with dao if it does not exist.
+     *
+     * @throws SQLException
+     */
+    default void createTableIfNotExists() throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Drops the table related with dao if it exist.
+     *
+     * @throws SQLException
+     */
+    default void dropTableIfExists() throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Create-method.
      * Inserts a data set object into a table.
      * Is unsupported by default.
