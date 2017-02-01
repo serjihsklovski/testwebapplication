@@ -18,6 +18,27 @@ public final class MysqlUserDaoImplementation implements UserDao {
     }
 
     @Override
+    public void createTableIfNotExists() throws SQLException {
+        StringBuilder sqlBuilder = new StringBuilder();
+
+        sqlBuilder
+                .append("CREATE TABLE IF NOT EXISTS `user` (")
+                .append("`id` integer NOT null AUTO_INCREMENT, ")
+                .append("`login` varchar(32) NOT null, ")
+                .append("`email` varchar(64) NOT null, ")
+                .append("`password` varchar(32) NOT null, ")
+                .append("PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+
+        Executor.execUpdate(conn, sqlBuilder.toString());
+    }
+
+    @Override
+    public void dropTableIfExists() throws SQLException {
+        String sql = "DROP TABLE IF EXISTS `user`";
+        Executor.execUpdate(conn, sql);
+    }
+
+    @Override
     public long insert(User user) throws SQLException {
         String sql = String.format("INSERT INTO `user` (`login`, `email`, `password`) VALUES ('%s', '%s', '%s')",
                 user.getLogin(), user.getEmail(), user.getPassword());
@@ -26,13 +47,17 @@ public final class MysqlUserDaoImplementation implements UserDao {
 
         sql = "SELECT LAST_INSERT_ID();";
 
-        return Executor.execQuery(conn, sql, (resultSet) -> {
+        long userId = Executor.execQuery(conn, sql, (resultSet) -> {
             if (resultSet.next()) {
                 return resultSet.getLong(1);
             }
 
             return -1L;
         });
+
+        user.setId(userId);
+
+        return userId;
     }
 
     @Override
