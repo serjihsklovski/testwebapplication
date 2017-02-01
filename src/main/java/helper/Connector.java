@@ -16,10 +16,10 @@ public final class Connector {
         }
 
         try {
-            Driver driver = (Driver) Class.forName(ServiceProperties.getJdbcDriverClassName()).newInstance();
+            Driver driver = (Driver) Class.forName(ServiceProperties.getInstance().getJdbcDriverClassName()).newInstance();
             DriverManager.registerDriver(driver);
-            connection = DriverManager.getConnection(ServiceProperties.getConnectionUrl());
-        } catch (IOException | SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            connection = DriverManager.getConnection(ServiceProperties.getInstance().getConnectionUrl());
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
