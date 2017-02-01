@@ -29,4 +29,10 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String toString() {
+        return String.format("<user id=\"%d\" login=\"%s\" email=\"%s\" password=\"%s\" />",
+                id, login, email, password);
+    }
 }
