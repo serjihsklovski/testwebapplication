@@ -6,33 +6,46 @@ import java.util.Properties;
 public final class ServiceProperties {
 
     private static final String CONFIG_FILE_PATH = "configs.properties";
-    private static Properties properties;
 
-    private static Properties getProperties() throws IOException {
-        if (properties != null) {
-            return properties;
-        }
+    private static ServiceProperties instance;
 
-        properties = new Properties();
+    private String connectionUrl;
+    private String userDaoImplementationClassName;
+    private String jdbcDriverClassName;
+
+    private ServiceProperties() {
+        Properties properties = new Properties();
 
         try (InputStream inputStream = ServiceProperties.class.getClassLoader()
                 .getResourceAsStream(CONFIG_FILE_PATH)) {
 
             properties.load(inputStream);
+
+            connectionUrl = properties.getProperty("connection_url");
+            userDaoImplementationClassName = properties.getProperty("user_dao_implementation_class_name");
+            jdbcDriverClassName = properties.getProperty("jdbc_driver_class_name");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ServiceProperties getInstance() {
+        if (instance == null) {
+            instance = new ServiceProperties();
         }
 
-        return properties;
+        return instance;
     }
 
-    public static String getConnectionUrl() throws IOException {
-        return getProperties().getProperty("connection_url");
+    public String getConnectionUrl() {
+        return connectionUrl;
     }
 
-    public static String getUserDaoImplementationClassName() throws IOException {
-        return getProperties().getProperty("user_dao_implementation_class_name");
+    public String getUserDaoImplementationClassName() {
+        return userDaoImplementationClassName;
     }
 
-    public static String getJdbcDriverClassName() throws IOException {
-        return getProperties().getProperty("jdbc_driver_class_name");
+    public String getJdbcDriverClassName() {
+        return jdbcDriverClassName;
     }
 }
