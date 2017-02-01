@@ -3,9 +3,9 @@ package database.dataset.user;
 public class UserBuilder {
 
     private long id = -1;
-    private String login = "";
-    private String email = "";
-    private String password = "";
+    private String login = null;
+    private String email = null;
+    private String password = null;
 
     public UserBuilder setId(long id) {
         this.id = id;
