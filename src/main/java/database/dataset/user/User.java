@@ -1,4 +1,4 @@
-package database.dataset;
+package database.dataset.user;
 
 public class User {
 
