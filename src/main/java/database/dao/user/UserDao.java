@@ -34,6 +34,16 @@ public interface UserDao extends AbstractDao<User> {
     int delete(long id) throws SQLException;
 
     /**
+     * Read-method.
+     * Returns a user by its login.
+     *
+     * @param login user login value
+     * @return user data set
+     * @throws SQLException
+     */
+    User getByLogin(String login) throws SQLException;
+
+    /**
      * Update-method.
      * Sets the new login value by the user id.
      *
