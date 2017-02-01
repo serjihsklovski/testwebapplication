@@ -1,9 +1,13 @@
 package helper.executor;
 
+import database.DataBaseServiceException;
+import helper.Connector;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.Callable;
 
 public class Executor {
 
@@ -29,5 +33,30 @@ public class Executor {
         }
 
         return value;
+    }
+
+    public static <T> T execTransaction(Callable<T> transactionBody) throws DataBaseServiceException {
+        Connection conn = Connector.getConnection();
+        T value;
+
+        try {
+            conn.setAutoCommit(false);
+            value = transactionBody.call();
+            conn.commit();
+
+            return value;
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ignored) {
+            }
+
+            throw new DataBaseServiceException(e);
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception ignored) {
+            }
+        }
     }
 }
