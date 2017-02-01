@@ -1,7 +1,8 @@
 package database.dao.user;
 
+import helper.Connector;
 import helper.executor.Executor;
-import database.dataset.User;
+import database.dataset.user.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,8 +13,8 @@ public final class MysqlUserDaoImplementation implements UserDao {
 
     private Connection conn;
 
-    public MysqlUserDaoImplementation(Connection conn) {
-        this.conn = conn;
+    public MysqlUserDaoImplementation() {
+        conn = Connector.getConnection();
     }
 
     @Override
@@ -23,7 +24,9 @@ public final class MysqlUserDaoImplementation implements UserDao {
 
         Executor.execUpdate(conn, sql);
 
-        return Executor.execQuery(conn, "SELECT LAST_INSERT_ID();", (resultSet) -> {
+        sql = "SELECT LAST_INSERT_ID();";
+
+        return Executor.execQuery(conn, sql, (resultSet) -> {
             if (resultSet.next()) {
                 return resultSet.getLong(1);
             }
