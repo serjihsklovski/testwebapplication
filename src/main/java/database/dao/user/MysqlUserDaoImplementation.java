@@ -1,6 +1,8 @@
 package database.dao.user;
 
-import database.dataset.user.UserBuilder;
+import database.dao.DaoException;
+import database.dao.DuplicateEntryException;
+import database.dao.NoSuchEntryException;
 import helper.Connector;
 import helper.executor.Executor;
 import database.dataset.user.User;
@@ -12,7 +14,7 @@ import java.util.List;
 public final class MysqlUserDaoImplementation implements UserDao {
 
     @Override
-    public void createTableIfNotExists() throws SQLException {
+    public void createTableIfNotExists() throws DaoException {
         StringBuilder sqlBuilder = new StringBuilder();
 
         sqlBuilder
@@ -23,122 +25,161 @@ public final class MysqlUserDaoImplementation implements UserDao {
                 .append("`password` varchar(32) NOT null, ")
                 .append("PRIMARY KEY (`id`)) ENGINE = InnoDB;");
 
-        Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString());
+        String sql = sqlBuilder.toString();
+
+        try {
+            Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString());
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
     }
 
     @Override
-    public void dropTableIfExists() throws SQLException {
+    public void dropTableIfExists() throws DaoException {
         String sql = "DROP TABLE IF EXISTS `user`";
-        Executor.execUpdate(Connector.getConnection(), sql);
+
+        try {
+            Executor.execUpdate(Connector.getConnection(), sql);
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
     }
 
     @Override
-    public long insert(User user) throws SQLException {
+    public long insert(User user) throws DaoException, DuplicateEntryException {
         String sql = String.format("INSERT INTO `user` (`login`, `email`, `password`) VALUES ('%s', '%s', '%s')",
                 user.getLogin(), user.getEmail(), user.getPassword());
 
-        Executor.execUpdate(Connector.getConnection(), sql);
-
-        sql = "SELECT LAST_INSERT_ID();";
-
-        long userId = Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return resultSet.getLong(1);
+        try {
+            user.setId(Executor.execInsert(Connector.getConnection(), sql));
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DuplicateEntryException("Unsuccessful attempt to insert: duplicate entry", e);
             }
 
-            return -1L;
-        });
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
 
-        user.setId(userId);
-
-        return userId;
+        return user.getId();
     }
 
     @Override
-    public User get(long id) throws SQLException {
+    public User get(long id) throws DaoException, NoSuchEntryException {
         String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `id` = %d", id);
-
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                );
-            }
-
-            return new UserBuilder().buildUser();
-        });
+        return getUserBySomething(sql);
     }
 
     @Override
-    public List<User> getList() throws SQLException {
+    public List<User> getList() throws DaoException {
         String sql = "SELECT `id`, `login`, `email`, `password` FROM `user`";
 
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            List<User> users = new LinkedList<>();
+        try {
+            return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                List<User> users = new LinkedList<>();
 
-            while (resultSet.next()) {
-                users.add(new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                ));
-            }
+                while (resultSet.next()) {
+                    users.add(new User(
+                            resultSet.getLong("id"),
+                            resultSet.getString("login"),
+                            resultSet.getString("email"),
+                            resultSet.getString("password")
+                    ));
+                }
 
-            return users;
-        });
+                return users;
+            });
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
     }
 
     @Override
-    public User getByLogin(String login) throws SQLException {
+    public User getByLogin(String login) throws DaoException, NoSuchEntryException {
         String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `login` = '%s'", login);
-
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                );
-            }
-
-            return new UserBuilder().buildUser();
-        });
+        return getUserBySomething(sql);
     }
 
     @Override
-    public int update(User user) throws SQLException {
+    public boolean update(User user) throws DaoException, DuplicateEntryException {
         String sql = String.format("UPDATE `user` SET `login` = '%s', `email` = '%s', `password` = '%s' WHERE `id` = %d",
                 user.getLogin(), user.getEmail(), user.getPassword(), user.getId());
-
-        return Executor.execUpdate(Connector.getConnection(), sql);
+        return updateUserData(sql);
     }
 
     @Override
-    public int delete(long id) throws SQLException {
+    public boolean delete(long id) throws DaoException {
         String sql = String.format("DELETE FROM `user` WHERE `id` = %d", id);
-        return Executor.execUpdate(Connector.getConnection(), sql);
+
+        try {
+            return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
     }
 
     @Override
-    public int updateLogin(long id, String login) throws SQLException {
+    public boolean updateLogin(long id, String login)
+            throws DaoException, DuplicateEntryException {
+
         String sql = String.format("UPDATE `user` SET `login` = '%s' WHERE `id` = %d", login, id);
-        return Executor.execUpdate(Connector.getConnection(), sql);
+        return updateUserData(sql);
     }
 
     @Override
-    public int updateEmail(long id, String email) throws SQLException {
+    public boolean updateEmail(long id, String email)
+            throws DaoException, DuplicateEntryException {
+
         String sql = String.format("UPDATE `user` SET `email` = '%s' WHERE `id` = %d", email, id);
-        return Executor.execUpdate(Connector.getConnection(), sql);
+        return updateUserData(sql);
     }
 
     @Override
-    public int updatePassword(long id, String password) throws SQLException {
+    public boolean updatePassword(long id, String password) throws DaoException {
         String sql = String.format("UPDATE `user` SET `password` = '%s' WHERE `id` = %d", password, id);
-        return Executor.execUpdate(Connector.getConnection(), sql);
+
+        try {
+            return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
+    }
+
+    private boolean updateUserData(String sql)
+            throws DaoException, DuplicateEntryException {
+
+        try {
+            return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DuplicateEntryException("Unsuccessful attempt to insert: duplicate entry", e);
+            }
+
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
+    }
+
+    private User getUserBySomething(String sql) throws DaoException, NoSuchEntryException {
+        try {
+            User user = Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getLong("id"),
+                            resultSet.getString("login"),
+                            resultSet.getString("email"),
+                            resultSet.getString("password")
+                    );
+                }
+
+                return null;
+            });
+
+            if (user == null) {
+                throw new NoSuchEntryException("No such user entry");
+            }
+
+            return user;
+        } catch (SQLException e) {
+            throw new DaoException(String.format("Can't execute SQL: { %s }", sql), e);
+        }
     }
 }
