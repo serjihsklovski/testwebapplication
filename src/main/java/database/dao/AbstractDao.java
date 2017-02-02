@@ -35,8 +35,9 @@ public interface AbstractDao<T> {
      * @param dataSet
      * @return id of the inserted data set object
      * @throws DaoException
+     * @throws DuplicateEntryException
      */
-    default long insert(T dataSet) throws DaoException {
+    default long insert(T dataSet) throws DaoException, DuplicateEntryException {
         throw new UnsupportedOperationException();
     }
 
@@ -48,8 +49,9 @@ public interface AbstractDao<T> {
      * @param id
      * @return data set object matched with the id
      * @throws DaoException
+     * @throws NoSuchEntryException
      */
-    default T get(long id) throws DaoException {
+    default T get(long id) throws DaoException, NoSuchEntryException {
         throw new UnsupportedOperationException();
     }
 
@@ -73,8 +75,9 @@ public interface AbstractDao<T> {
      * @param dataSet
      * @return was the operation successful?
      * @throws DaoException
+     * @throws DuplicateEntryException
      */
-    default boolean update(T dataSet) throws DaoException {
+    default boolean update(T dataSet) throws DaoException, DuplicateEntryException {
         throw new UnsupportedOperationException();
     }
 
