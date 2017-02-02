@@ -24,7 +24,7 @@ public interface UserDao extends AbstractDao<User> {
     long insert(User user) throws DaoException, DuplicateEntryException;
 
     @Override
-    User get(long id) throws DaoException, NoSuchUserException;
+    User get(long id) throws DaoException, NoSuchEntryException;
 
     @Override
     List<User> getList() throws DaoException;
@@ -82,7 +82,7 @@ public interface UserDao extends AbstractDao<User> {
      * @param password new password value
      * @return was the operation successful?
      * @throws DaoException
-     * @throws NoSuchUserException
+     * @throws NoSuchEntryException
      */
     boolean updatePassword(long id, String password)
             throws DaoException, NoSuchEntryException;
