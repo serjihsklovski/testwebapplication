@@ -2,9 +2,10 @@ package database.dao.user;
 
 import database.dao.AbstractDao;
 import database.dao.DaoException;
+import database.dao.DuplicateEntryException;
+import database.dao.NoSuchEntryException;
 import database.dataset.user.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -20,16 +21,16 @@ public interface UserDao extends AbstractDao<User> {
     void dropTableIfExists() throws DaoException;
 
     @Override
-    long insert(User user) throws DaoException;
+    long insert(User user) throws DaoException, DuplicateEntryException;
 
     @Override
-    User get(long id) throws DaoException;
+    User get(long id) throws DaoException, NoSuchUserException;
 
     @Override
     List<User> getList() throws DaoException;
 
     @Override
-    boolean update(User user) throws DaoException;
+    boolean update(User user) throws DaoException, DuplicateEntryException;
 
     @Override
     boolean delete(long id) throws DaoException;
@@ -41,9 +42,9 @@ public interface UserDao extends AbstractDao<User> {
      * @param login user login value
      * @return user data set
      * @throws DaoException
-     * @throws NoSuchUserException
+     * @throws NoSuchEntryException
      */
-    User getByLogin(String login) throws DaoException, NoSuchUserException;
+    User getByLogin(String login) throws DaoException, NoSuchEntryException;
 
     /**
      * Update-method.
@@ -52,12 +53,12 @@ public interface UserDao extends AbstractDao<User> {
      * @param id user id
      * @param login new login value
      * @return was the operation successful?
-     * @throws SQLException
-     * @throws NoSuchUserException
-     * @throws NotUniqueUserLoginException
+     * @throws DaoException
+     * @throws NoSuchEntryException
+     * @throws DuplicateEntryException
      */
     boolean updateLogin(long id, String login)
-            throws DaoException, NoSuchUserException, NotUniqueUserLoginException;
+            throws DaoException, NoSuchEntryException, DuplicateEntryException;
 
     /**
      * Update-method.
@@ -66,12 +67,12 @@ public interface UserDao extends AbstractDao<User> {
      * @param id user id
      * @param email new email value
      * @return was the operation successful?
-     * @throws SQLException
-     * @throws NoSuchUserException
-     * @throws NotUniqueUserEmailException
+     * @throws DaoException
+     * @throws NoSuchEntryException
+     * @throws DuplicateEntryException
      */
     boolean updateEmail(long id, String email)
-            throws DaoException, NoSuchUserException, NotUniqueUserEmailException;
+            throws DaoException, NoSuchEntryException, DuplicateEntryException;
 
     /**
      * Update-method.
@@ -80,9 +81,9 @@ public interface UserDao extends AbstractDao<User> {
      * @param id user id
      * @param password new password value
      * @return was the operation successful?
-     * @throws SQLException
+     * @throws DaoException
      * @throws NoSuchUserException
      */
     boolean updatePassword(long id, String password)
-            throws DaoException, NoSuchUserException;
+            throws DaoException, NoSuchEntryException;
 }
