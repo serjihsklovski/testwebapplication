@@ -21,6 +21,16 @@ public class Executor {
         return affectedRowsCount;
     }
 
+    public static long execInsert(Connection conn, String ins) throws SQLException {
+        long lastInsertedId;
+
+        try (Statement stmt = conn.createStatement()) {
+            lastInsertedId = stmt.executeLargeUpdate(ins, Statement.RETURN_GENERATED_KEYS);
+        }
+
+        return lastInsertedId;
+    }
+
     public static <T> T execQuery(Connection conn, String query, ResultHandler<T> handler)
             throws SQLException {
 
