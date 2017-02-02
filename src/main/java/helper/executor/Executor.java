@@ -1,6 +1,6 @@
 package helper.executor;
 
-import database.DataBaseServiceException;
+import database.service.DataBaseServiceException;
 import helper.Connector;
 
 import java.sql.Connection;

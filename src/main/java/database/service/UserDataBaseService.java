@@ -1,4 +1,4 @@
-package database;
+package database.service;
 
 import database.dao.DaoFactory;
 import database.dao.user.UserDao;
@@ -6,17 +6,16 @@ import database.dataset.user.User;
 import helper.ServiceProperties;
 import helper.executor.Executor;
 
-import java.sql.SQLException;
 import java.util.List;
 
-public class DataBaseService {
+public class UserDataBaseService {
 
-    private static DataBaseService instance;
+    private static UserDataBaseService instance;
 
     // daos
     private UserDao userDao;
 
-    private DataBaseService() throws DataBaseServiceException {
+    private UserDataBaseService() throws DataBaseServiceException {
         try {
             userDao = DaoFactory.createDao(ServiceProperties.getInstance()
                     .getUserDaoImplementationClassName());
@@ -25,9 +24,9 @@ public class DataBaseService {
         }
     }
 
-    public static DataBaseService getInstance() throws DataBaseServiceException {
+    public static UserDataBaseService getInstance() throws DataBaseServiceException {
         if (instance == null) {
-            instance = new DataBaseService();
+            instance = new UserDataBaseService();
         }
 
         return instance;
@@ -57,7 +56,7 @@ public class DataBaseService {
     public User getUser(long id) throws DataBaseServiceException {
         try {
             return userDao.get(id);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DataBaseServiceException(e);
         }
     }
@@ -71,7 +70,7 @@ public class DataBaseService {
     public List<User> getUserList() throws DataBaseServiceException {
         try {
             return userDao.getList();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DataBaseServiceException(e);
         }
     }
@@ -80,10 +79,10 @@ public class DataBaseService {
      * Updates user's login, email and password.
      *
      * @param user
-     * @return affected rows count
+     * @return was the operation successful?
      * @throws DataBaseServiceException
      */
-    public int updateUser(User user) throws DataBaseServiceException {
+    public boolean updateUser(User user) throws DataBaseServiceException {
         return Executor.execTransaction(() -> userDao.update(user));
     }
 
@@ -92,10 +91,10 @@ public class DataBaseService {
      *
      * @param userId user's id value
      * @param userLogin new user's login value
-     * @return affected rows count
+     * @return was the operation successful?
      * @throws DataBaseServiceException
      */
-    public int updateUserLogin(long userId, String userLogin) throws DataBaseServiceException {
+    public boolean updateUserLogin(long userId, String userLogin) throws DataBaseServiceException {
         return Executor.execTransaction(() -> userDao.updateLogin(userId, userLogin));
     }
 
@@ -104,10 +103,10 @@ public class DataBaseService {
      *
      * @param userId user's id value
      * @param userEmail new user's email value
-     * @return affected rows count
+     * @return was the operation successful?
      * @throws DataBaseServiceException
      */
-    public int updateUserEmail(long userId, String userEmail) throws DataBaseServiceException {
+    public boolean updateUserEmail(long userId, String userEmail) throws DataBaseServiceException {
         return Executor.execTransaction(() -> userDao.updateEmail(userId, userEmail));
     }
 
@@ -119,7 +118,7 @@ public class DataBaseService {
      * @return affected rows count
      * @throws DataBaseServiceException
      */
-    public int updateUserPassword(long userId, String password) throws DataBaseServiceException {
+    public boolean updateUserPassword(long userId, String password) throws DataBaseServiceException {
         return Executor.execTransaction(() -> userDao.updatePassword(userId, password));
     }
 
@@ -127,10 +126,10 @@ public class DataBaseService {
      * Deletes a user by its id.
      *
      * @param userId user's id value
-     * @return affected rows count
+     * @return was the operation successful?
      * @throws DataBaseServiceException
      */
-    public int deleteUser(long userId) throws DataBaseServiceException {
+    public boolean deleteUser(long userId) throws DataBaseServiceException {
         return Executor.execTransaction(() -> userDao.delete(userId));
     }
 }
