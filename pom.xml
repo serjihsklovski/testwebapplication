@@ -20,6 +20,26 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>exec-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+
+        <executions>
+          <execution>
+            <id>Download CSS-dependencies</id>
+            <phase>generate-sources</phase>
+
+            <goals>
+              <goal>exec</goal>
+            </goals>
+
+            <configuration>
+              <executable>${basedir}/download_dependencies.sh</executable>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>

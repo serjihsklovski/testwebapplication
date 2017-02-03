@@ -2,3 +2,4 @@
 /target/*
 /testwebapplication.iml
 /src/main/webapp/css/node_modules/*
+/src/main/webapp/css/etc/*
