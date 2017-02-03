@@ -1,3 +1,4 @@
 /.idea/*
 /target/*
 /testwebapplication.iml
+/src/main/webapp/css/node_modules/*
