@@ -1,8 +1,8 @@
 package servlet.user;
 
 import database.dataset.user.User;
-import database.service.DataBaseServiceException;
-import database.service.UserDataBaseService;
+import service.ServiceException;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,10 +24,10 @@ public class EditServlet extends HttpServlet {
 
         if (userIdParam != null) {
             try {
-                User user = UserDataBaseService.getInstance().getUser(Long.valueOf(userIdParam));
+                User user = UserService.getInstance().getUser(Long.valueOf(userIdParam));
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("/view/user/edit.jsp").forward(request, response);
-            } catch (NumberFormatException | DataBaseServiceException e) {
+            } catch (NumberFormatException | ServiceException e) {
                 e.printStackTrace();
             }
         } else {
@@ -52,7 +52,7 @@ public class EditServlet extends HttpServlet {
         if (idParam != null) {
             try {
                 id = Long.valueOf(idParam);
-                User user = UserDataBaseService.getInstance().getUser(id);
+                User user = UserService.getInstance().getUser(id);
 
                 System.out.println(user);
                 System.out.println("new login = " + loginParam);
@@ -64,9 +64,9 @@ public class EditServlet extends HttpServlet {
                     user.setEmail(emailParam);
                     user.setPassword(passwordParam);
 
-                    done = UserDataBaseService.getInstance().updateUser(user);
+                    done = UserService.getInstance().updateUser(user);
                 }
-            } catch (DataBaseServiceException e) {
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }

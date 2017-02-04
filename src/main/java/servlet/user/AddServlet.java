@@ -2,8 +2,8 @@ package servlet.user;
 
 import database.dataset.user.User;
 import database.dataset.user.UserBuilder;
-import database.service.DataBaseServiceException;
-import database.service.UserDataBaseService;
+import service.ServiceException;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,9 +43,9 @@ public class AddServlet extends HttpServlet {
                     .buildUser();
 
             try {
-                UserDataBaseService.getInstance().addUser(user);
+                UserService.getInstance().addUser(user);
                 done = true;
-            } catch (DataBaseServiceException e) {
+            } catch (ServiceException e) {
                 e.printStackTrace();
             }
         }

@@ -1,6 +1,6 @@
 package helper.executor;
 
-import database.service.DataBaseServiceException;
+import service.ServiceException;
 import helper.Connector;
 
 import java.sql.Connection;
@@ -45,7 +45,7 @@ public class Executor {
         return value;
     }
 
-    public static <T> T execTransaction(Callable<T> transactionBody) throws DataBaseServiceException {
+    public static <T> T execTransaction(Callable<T> transactionBody) throws ServiceException {
         Connection conn = Connector.getConnection();
         T value;
 
@@ -61,7 +61,7 @@ public class Executor {
             } catch (SQLException ignored) {
             }
 
-            throw new DataBaseServiceException(e);
+            throw new ServiceException(e);
         } finally {
             try {
                 conn.close();

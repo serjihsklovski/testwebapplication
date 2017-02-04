@@ -1,7 +1,7 @@
 package servlet.user;
 
-import database.service.UserDataBaseService;
-import database.service.DataBaseServiceException;
+import service.UserService;
+import service.ServiceException;
 import database.dataset.user.User;
 
 import javax.servlet.ServletException;
@@ -22,10 +22,10 @@ public class ListServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         try {
-            List<User> users = UserDataBaseService.getInstance().getUserList();
+            List<User> users = UserService.getInstance().getUserList();
             request.setAttribute("users", users);
             request.getRequestDispatcher("/view/user/list.jsp").forward(request, response);
-        } catch (DataBaseServiceException e) {
+        } catch (ServiceException e) {
             e.printStackTrace();
         }
     }

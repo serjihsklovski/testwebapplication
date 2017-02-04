@@ -1,4 +1,4 @@
-package database.service;
+package service;
 
 import database.dao.DaoFactory;
 import database.dao.user.UserDao;
@@ -6,27 +6,28 @@ import database.dataset.user.User;
 import helper.ServiceProperties;
 import helper.executor.Executor;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class UserDataBaseService {
+public class UserService {
 
-    private static UserDataBaseService instance;
+    private static UserService instance;
 
     // daos
     private UserDao userDao;
 
-    private UserDataBaseService() throws DataBaseServiceException {
+    private UserService() throws ServiceException {
         try {
             userDao = DaoFactory.createDao(ServiceProperties.getInstance()
                     .getUserDaoImplementationClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new DataBaseServiceException(e);
+            throw new ServiceException(e);
         }
     }
 
-    public static UserDataBaseService getInstance() throws DataBaseServiceException {
+    public static UserService getInstance() throws ServiceException {
         if (instance == null) {
-            instance = new UserDataBaseService();
+            instance = new UserService();
         }
 
         return instance;
@@ -37,9 +38,9 @@ public class UserDataBaseService {
      *
      * @param user new user
      * @return last inserted user id
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public long addUser(User user) throws DataBaseServiceException {
+    public long addUser(User user) throws ServiceException {
         return Executor.execTransaction(() -> {
             userDao.createTableIfNotExists();
             return userDao.insert(user);
@@ -51,28 +52,23 @@ public class UserDataBaseService {
      *
      * @param id user id
      * @return user data set object
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public User getUser(long id) throws DataBaseServiceException {
-        try {
-            return userDao.get(id);
-        } catch (Exception e) {
-            throw new DataBaseServiceException(e);
-        }
+    public User getUser(long id) throws ServiceException {
+        return Executor.execTransaction(() -> userDao.get(id));
     }
 
     /**
      * Returns all users from the `user` table.
      *
      * @return user list
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public List<User> getUserList() throws DataBaseServiceException {
-        try {
+    public List<User> getUserList() throws ServiceException {
+        return Executor.execTransaction(() -> {
+            userDao.createTableIfNotExists();
             return userDao.getList();
-        } catch (Exception e) {
-            throw new DataBaseServiceException(e);
-        }
+        });
     }
 
     /**
@@ -80,9 +76,9 @@ public class UserDataBaseService {
      *
      * @param user
      * @return was the operation successful?
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public boolean updateUser(User user) throws DataBaseServiceException {
+    public boolean updateUser(User user) throws ServiceException {
         return Executor.execTransaction(() -> userDao.update(user));
     }
 
@@ -92,9 +88,9 @@ public class UserDataBaseService {
      * @param userId user's id value
      * @param userLogin new user's login value
      * @return was the operation successful?
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public boolean updateUserLogin(long userId, String userLogin) throws DataBaseServiceException {
+    public boolean updateUserLogin(long userId, String userLogin) throws ServiceException {
         return Executor.execTransaction(() -> userDao.updateLogin(userId, userLogin));
     }
 
@@ -104,9 +100,9 @@ public class UserDataBaseService {
      * @param userId user's id value
      * @param userEmail new user's email value
      * @return was the operation successful?
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public boolean updateUserEmail(long userId, String userEmail) throws DataBaseServiceException {
+    public boolean updateUserEmail(long userId, String userEmail) throws ServiceException {
         return Executor.execTransaction(() -> userDao.updateEmail(userId, userEmail));
     }
 
@@ -116,9 +112,9 @@ public class UserDataBaseService {
      * @param userId user's id value
      * @param password new user's password value
      * @return affected rows count
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public boolean updateUserPassword(long userId, String password) throws DataBaseServiceException {
+    public boolean updateUserPassword(long userId, String password) throws ServiceException {
         return Executor.execTransaction(() -> userDao.updatePassword(userId, password));
     }
 
@@ -127,9 +123,9 @@ public class UserDataBaseService {
      *
      * @param userId user's id value
      * @return was the operation successful?
-     * @throws DataBaseServiceException
+     * @throws ServiceException
      */
-    public boolean deleteUser(long userId) throws DataBaseServiceException {
+    public boolean deleteUser(long userId) throws ServiceException {
         return Executor.execTransaction(() -> userDao.delete(userId));
     }
 }

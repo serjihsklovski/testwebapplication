@@ -1,5 +1,6 @@
 package database.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -12,18 +13,18 @@ public interface AbstractDao<T> {
     /**
      * Creates the table related with dao if it does not exist.
      *
-     * @throws DaoException
+     * @throws SQLException
      */
-    default void createTableIfNotExists() throws DaoException {
+    default void createTableIfNotExists() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Drops the table related with dao if it exist.
      *
-     * @throws DaoException
+     * @throws SQLException
      */
-    default void dropTableIfExists() throws DaoException {
+    default void dropTableIfExists() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -34,10 +35,9 @@ public interface AbstractDao<T> {
      *
      * @param dataSet
      * @return id of the inserted data set object
-     * @throws DaoException
-     * @throws DuplicateEntryException
+     * @throws SQLException
      */
-    default long insert(T dataSet) throws DaoException, DuplicateEntryException {
+    default long insert(T dataSet) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -48,10 +48,9 @@ public interface AbstractDao<T> {
      *
      * @param id
      * @return data set object matched with the id
-     * @throws DaoException
-     * @throws NoSuchEntryException
+     * @throws SQLException
      */
-    default T get(long id) throws DaoException, NoSuchEntryException {
+    default T get(long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -61,9 +60,9 @@ public interface AbstractDao<T> {
      * Is unsupported by default.
      *
      * @return a list of data set objects
-     * @throws DaoException
+     * @throws SQLException
      */
-    default List<T> getList() throws DaoException {
+    default List<T> getList() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -74,10 +73,9 @@ public interface AbstractDao<T> {
      *
      * @param dataSet
      * @return was the operation successful?
-     * @throws DaoException
-     * @throws DuplicateEntryException
+     * @throws SQLException
      */
-    default boolean update(T dataSet) throws DaoException, DuplicateEntryException {
+    default boolean update(T dataSet) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -88,9 +86,9 @@ public interface AbstractDao<T> {
      *
      * @param id
      * @return was the operation successful?
-     * @throws DaoException
+     * @throws SQLException
      */
-    default boolean delete(long id) throws DaoException {
+    default boolean delete(long id) throws SQLException {
         throw new UnsupportedOperationException();
     }
 }

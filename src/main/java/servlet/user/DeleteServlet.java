@@ -1,7 +1,7 @@
 package servlet.user;
 
-import database.service.DataBaseServiceException;
-import database.service.UserDataBaseService;
+import service.ServiceException;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +22,8 @@ public class DeleteServlet extends HttpServlet {
 
         if (idParam != null) {
             try {
-                UserDataBaseService.getInstance().deleteUser(Long.valueOf(idParam));
-            } catch (NumberFormatException | DataBaseServiceException e) {
+                UserService.getInstance().deleteUser(Long.valueOf(idParam));
+            } catch (NumberFormatException | ServiceException e) {
                 e.printStackTrace();
             }
         }
