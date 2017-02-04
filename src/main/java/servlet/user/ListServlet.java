@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/user/list")
+@WebServlet({"/", "/index", "/user/list"})
 public class ListServlet extends HttpServlet {
 
     @Override
