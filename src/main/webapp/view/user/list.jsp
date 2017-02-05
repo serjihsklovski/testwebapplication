@@ -28,7 +28,7 @@
 
     <tbody>
 
-    <%--@elvariable id="users" type="java.util.List<database.dataset.user.User>"--%>
+    <%--@elvariable id="users" type="java.util.List<database.model.user.User>"--%>
     <c:forEach var="user" items="${users}">
       <tr>
         <td>${user.id}</td>

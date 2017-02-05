@@ -1,4 +1,4 @@
-package database.dataset.user;
+package database.model.user;
 
 public class UserBuilder {
 

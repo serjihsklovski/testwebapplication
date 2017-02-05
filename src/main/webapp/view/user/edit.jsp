@@ -13,7 +13,7 @@
 <main>
   <h1>Edit User</h1>
 
-  <%--@elvariable id="user" type="database.dataset.user.User"--%>
+  <%--@elvariable id="user" type="database.model.user.User"--%>
 
   <form action="/user/edit" method="post">
     <table>

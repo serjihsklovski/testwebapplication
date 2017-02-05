@@ -1,7 +1,7 @@
 package servlet.user;
 
-import database.dataset.user.User;
-import database.dataset.user.UserBuilder;
+import database.model.user.User;
+import database.model.user.UserBuilder;
 import service.ServiceException;
 import service.UserService;
 

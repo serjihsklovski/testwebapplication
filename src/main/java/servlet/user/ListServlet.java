@@ -2,7 +2,7 @@ package servlet.user;
 
 import service.UserService;
 import service.ServiceException;
-import database.dataset.user.User;
+import database.model.user.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

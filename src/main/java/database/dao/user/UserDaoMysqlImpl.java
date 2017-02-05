@@ -2,7 +2,7 @@ package database.dao.user;
 
 import helper.Connector;
 import helper.executor.Executor;
-import database.dataset.user.User;
+import database.model.user.User;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
