@@ -1,4 +1,4 @@
-package servlet.user;
+package controller.user;
 
 import database.model.user.User;
 import database.model.user.UserBuilder;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/user/add")
-public class AddServlet extends HttpServlet {
+public class AddController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

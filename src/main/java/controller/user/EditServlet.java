@@ -1,4 +1,4 @@
-package servlet.user;
+package controller.user;
 
 import database.model.user.User;
 import service.ServiceException;

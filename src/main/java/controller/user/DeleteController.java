@@ -1,4 +1,4 @@
-package servlet.user;
+package controller.user;
 
 import service.ServiceException;
 import service.UserService;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/user/delete")
-public class DeleteServlet extends HttpServlet {
+public class DeleteController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

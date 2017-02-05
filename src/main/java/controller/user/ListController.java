@@ -1,4 +1,4 @@
-package servlet.user;
+package controller.user;
 
 import service.UserService;
 import service.ServiceException;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/user/list")
-public class ListServlet extends HttpServlet {
+public class ListController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
