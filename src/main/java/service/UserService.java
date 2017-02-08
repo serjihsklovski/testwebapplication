@@ -47,6 +47,21 @@ public class UserService {
     }
 
     /**
+     * Inserts a new admin into the `user` table, returns its id.
+     *
+     * @param admin new admi
+     * @return last inserted user id
+     * @throws ServiceException
+     */
+    public long addAdmin(User admin) throws ServiceException {
+        return Executor.execTransaction(() -> {
+            userDao.createTableIfNotExists();
+            admin.setRole(User.ROLE_ADMIN);
+            return userDao.insert(admin);
+        });
+    }
+
+    /**
      * Returns user.
      *
      * @param id user id
@@ -110,11 +125,23 @@ public class UserService {
      *
      * @param userId user's id value
      * @param password new user's password value
-     * @return affected rows count
+     * @return was the operation successful?
      * @throws ServiceException
      */
     public boolean updateUserPassword(long userId, String password) throws ServiceException {
         return Executor.execTransaction(() -> userDao.updatePassword(userId, password));
+    }
+
+    /**
+     * Updates user's password.
+     *
+     * @param userId user's id value
+     * @param role new user's role value
+     * @return was the operation successful?
+     * @throws ServiceException
+     */
+    public boolean updateUserRole(long userId, String role) throws ServiceException {
+        return Executor.execTransaction(() -> userDao.updateRole(userId, role));
     }
 
     /**
