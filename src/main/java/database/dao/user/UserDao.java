@@ -44,6 +44,16 @@ public interface UserDao extends AbstractDao<User> {
     User getByLogin(String login) throws SQLException;
 
     /**
+     * Read-method.
+     * Returns a user by its email.
+     *
+     * @param email user emaul value
+     * @return user data set
+     * @throws SQLException
+     */
+    User getByEmail(String email) throws SQLException;
+
+    /**
      * Update-method.
      * Sets the new login value by the user id.
      *
@@ -75,4 +85,15 @@ public interface UserDao extends AbstractDao<User> {
      * @throws SQLException
      */
     boolean updatePassword(long id, String password) throws SQLException;
+
+    /**
+     * Update-method.
+     * Sets the new role value by the user id.
+     *
+     * @param id user id
+     * @param role new role value
+     * @return was the operation successful?
+     * @throws SQLException
+     */
+    boolean updateRole(long id, String role) throws  SQLException;
 }
