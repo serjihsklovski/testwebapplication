@@ -34,6 +34,11 @@
         <td><input type="password" name="password" id="password" required></td>
       </tr>
 
+      <tr>
+        <td><label for="is-admin">Is Admin:</label></td>
+        <td><input type="checkbox" name="is-admin" id="is-admin"></td>
+      </tr>
+
       </tbody>
     </table>
 

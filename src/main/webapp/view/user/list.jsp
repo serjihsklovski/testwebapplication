@@ -21,6 +21,7 @@
       <th>Login</th>
       <th>Email</th>
       <th>Password</th>
+      <th>Role</th>
       <th colspan="2">Action</th>
     </tr>
 
@@ -35,6 +36,7 @@
         <td>${user.login}</td>
         <td>${user.email}</td>
         <td>${user.password}</td>
+        <td>${user.role}</td>
         <td><a class="button good" href="/user/edit?id=${user.id}">Edit</a></td>
         <td><a class="button bad" href="/user/delete?id=${user.id}">Delete</a></td>
       </tr>

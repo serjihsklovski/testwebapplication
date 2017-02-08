@@ -22,18 +22,23 @@
       <tbody>
 
       <tr>
-        <td><label for="login">Login</label></td>
+        <td><label for="login">Login:</label></td>
         <td><input type="text" name="login" id="login" required value="${user.login}"></td>
       </tr>
 
       <tr>
-        <td><label for="email">Email</label></td>
+        <td><label for="email">Email:</label></td>
         <td><input type="email" name="email" id="email" required value="${user.email}"></td>
       </tr>
 
       <tr>
-        <td><label for="password">Password</label></td>
+        <td><label for="password">Password:</label></td>
         <td><input type="password" name="password" id="password" required></td>
+      </tr>
+
+      <tr>
+        <td><label for="is-admin">Is Admin:</label></td>
+        <td><input type="checkbox" name="is-admin" id="is-admin" ${user.role.equals("admin") ? "cheched=\"on\"" : ""}></td>
       </tr>
 
       </tbody>
