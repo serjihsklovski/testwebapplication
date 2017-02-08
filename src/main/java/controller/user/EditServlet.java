@@ -45,6 +45,14 @@ public class EditServlet extends HttpServlet {
         String loginParam = request.getParameter("login");
         String emailParam = request.getParameter("email");
         String passwordParam = request.getParameter("password");
+        String userIsAdmin = request.getParameter("is-admin");
+        String userRole = User.ROLE_USER;
+
+        System.out.println(userIsAdmin);
+
+        if ((userIsAdmin != null) && userIsAdmin.equals("on")) {
+            userRole = User.ROLE_ADMIN;
+        }
 
         long id = -1;
         boolean done = false;
@@ -54,15 +62,11 @@ public class EditServlet extends HttpServlet {
                 id = Long.valueOf(idParam);
                 User user = UserService.getInstance().getUser(id);
 
-                System.out.println(user);
-                System.out.println("new login = " + loginParam);
-                System.out.println("new email = " + emailParam);
-                System.out.println("new password = " + passwordParam);
-
                 if ((loginParam != null) && (emailParam != null) && (passwordParam != null)) {
                     user.setLogin(loginParam);
                     user.setEmail(emailParam);
                     user.setPassword(passwordParam);
+                    user.setRole(userRole);
 
                     done = UserService.getInstance().updateUser(user);
                 }

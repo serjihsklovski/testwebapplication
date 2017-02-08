@@ -32,6 +32,12 @@ public class AddController extends HttpServlet {
         String userLogin = request.getParameter("login");
         String userEmail = request.getParameter("email");
         String userPassword = request.getParameter("password");
+        String userIsAdmin = request.getParameter("is-admin");
+        String userRole = User.ROLE_USER;
+
+        if ((userIsAdmin != null) && userIsAdmin.equals("on")) {
+            userRole = User.ROLE_ADMIN;
+        }
 
         boolean done = false;
 
@@ -40,6 +46,7 @@ public class AddController extends HttpServlet {
                     .setLogin(userLogin)
                     .setEmail(userEmail)
                     .setPassword(userPassword)
+                    .setRole(userRole)
                     .buildUser();
 
             try {
