@@ -2,6 +2,9 @@ package database.model.user;
 
 public class User {
 
+    public static final String ROLE_USER = "user";
+    public static final String ROLE_ADMIN = "admin";
+
     private long id;
     private String login;
     private String email;
@@ -14,6 +17,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public User(long id, String login, String email, String password) {
+        this(id, login, email, password, ROLE_USER);
     }
 
     public long getId() {
