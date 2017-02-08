@@ -20,6 +20,7 @@ public final class UserDaoMysqlImpl implements UserDao {
                 .append("`login` varchar(32) NOT null UNIQUE, ")
                 .append("`email` varchar(64) NOT null UNIQUE, ")
                 .append("`password` varchar(32) NOT null, ")
+                .append("`role` varchar(32) NOT null, ")
                 .append("PRIMARY KEY (`id`)) ENGINE = InnoDB;");
 
         Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString());
@@ -33,8 +34,10 @@ public final class UserDaoMysqlImpl implements UserDao {
 
     @Override
     public long insert(User user) throws SQLException {
-        String sql = String.format("INSERT INTO `user` (`login`, `email`, `password`) VALUES ('%s', '%s', '%s')",
-                user.getLogin(), user.getEmail(), user.getPassword());
+        String sql = String.format(
+                "INSERT INTO `user` (`login`, `email`, `password`, `role`) VALUES ('%s', '%s', '%s', '%s')",
+                user.getLogin(), user.getEmail(), user.getPassword(), user.getRole()
+        );
 
         user.setId(Executor.execInsert(Connector.getConnection(), sql));
 
@@ -43,7 +46,7 @@ public final class UserDaoMysqlImpl implements UserDao {
 
     @Override
     public User get(long id) throws SQLException {
-        String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `id` = %d", id);
+        String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `id` = %d", id);
 
         return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
             if (resultSet.next()) {
@@ -51,7 +54,8 @@ public final class UserDaoMysqlImpl implements UserDao {
                         resultSet.getLong("id"),
                         resultSet.getString("login"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        resultSet.getString("role")
                 );
             }
 
@@ -61,7 +65,7 @@ public final class UserDaoMysqlImpl implements UserDao {
 
     @Override
     public List<User> getList() throws SQLException {
-        String sql = "SELECT `id`, `login`, `email`, `password` FROM `user`";
+        String sql = "SELECT `id`, `login`, `email`, `password`, `role` FROM `user`";
 
         return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
             List<User> users = new LinkedList<>();
@@ -71,7 +75,8 @@ public final class UserDaoMysqlImpl implements UserDao {
                         resultSet.getLong("id"),
                         resultSet.getString("login"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        resultSet.getString("role")
                 ));
             }
 
@@ -81,7 +86,7 @@ public final class UserDaoMysqlImpl implements UserDao {
 
     @Override
     public User getByLogin(String login) throws SQLException {
-        String sql = String.format("SELECT `id`, `login`, `email`, `password` FROM `user` WHERE `login` = '%s'", login);
+        String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `login` = '%s'", login);
 
         return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
             if (resultSet.next()) {
@@ -89,7 +94,27 @@ public final class UserDaoMysqlImpl implements UserDao {
                         resultSet.getLong("id"),
                         resultSet.getString("login"),
                         resultSet.getString("email"),
-                        resultSet.getString("password")
+                        resultSet.getString("password"),
+                        resultSet.getString("role")
+                );
+            }
+
+            return null;
+        });
+    }
+
+    @Override
+    public User getByEmail(String email) throws SQLException {
+        String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `email` = '%s'", email);
+
+        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+            if (resultSet.next()) {
+                return new User(
+                        resultSet.getLong("id"),
+                        resultSet.getString("login"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password"),
+                        resultSet.getString("role")
                 );
             }
 
@@ -99,8 +124,8 @@ public final class UserDaoMysqlImpl implements UserDao {
 
     @Override
     public boolean update(User user) throws SQLException {
-        String sql = String.format("UPDATE `user` SET `login` = '%s', `email` = '%s', `password` = '%s' WHERE `id` = %d",
-                user.getLogin(), user.getEmail(), user.getPassword(), user.getId());
+        String sql = String.format("UPDATE `user` SET `login` = '%s', `email` = '%s', `password` = '%s', `role` = '%s' WHERE `id` = %d",
+                user.getLogin(), user.getEmail(), user.getPassword(), user.getRole(), user.getId());
 
         return Executor.execUpdate(Connector.getConnection(), sql) != 0;
     }
@@ -126,6 +151,12 @@ public final class UserDaoMysqlImpl implements UserDao {
     @Override
     public boolean updatePassword(long id, String password) throws SQLException {
         String sql = String.format("UPDATE `user` SET `password` = '%s' WHERE `id` = %d", password, id);
+        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+    }
+
+    @Override
+    public boolean updateRole(long id, String role) throws SQLException {
+        String sql = String.format("UPDATE `user` SET `role` = '%s' WHERE `id` = %d", role, id);
         return Executor.execUpdate(Connector.getConnection(), sql) != 0;
     }
 }
