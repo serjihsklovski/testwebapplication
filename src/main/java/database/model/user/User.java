@@ -6,12 +6,14 @@ public class User {
     private String login;
     private String email;
     private String password;
+    private String role;
 
-    public User(long id, String login, String email, String password) {
+    public User(long id, String login, String email, String password, String role) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public long getId() {
@@ -30,6 +32,10 @@ public class User {
         return password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -46,9 +52,27 @@ public class User {
         this.password = password;
     }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    /**
+     * Represents a user as a json object.
+     *
+     * @return String json
+     */
     @Override
     public String toString() {
-        return String.format("<user id=\"%d\" login=\"%s\" email=\"%s\" password=\"%s\" />",
-                id, login, email, password);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder
+                .append("{\"id\": %d, ")
+                .append("\"login\": \"%s\", ")
+                .append("\"email\": \"%s\", ")
+                .append("\"password\": \"%s\", ")
+                .append("\"role\": \"%s\"}");
+
+        return String.format(stringBuilder.toString(),
+                id, login, email, password, role);
     }
 }
