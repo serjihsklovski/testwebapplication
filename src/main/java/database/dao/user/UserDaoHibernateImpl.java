@@ -23,13 +23,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public long insert(User user) throws SQLException {
+        long id = -1;
         Session session = HibernateSessionFactory
                 .getInstance().getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
 
-            user.setId((long) session.save(user));
+            id = (long) session.save(user);
 
             session.flush();
             session.getTransaction().commit();
@@ -40,7 +41,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.close();
         }
 
-        return user.getId();
+        user.setId(id);
+        
+        return id;
     }
 
     @Override
