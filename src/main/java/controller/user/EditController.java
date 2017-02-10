@@ -40,6 +40,7 @@ public class EditServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
 
         String idParam = request.getParameter("id");
         String loginParam = request.getParameter("login");
