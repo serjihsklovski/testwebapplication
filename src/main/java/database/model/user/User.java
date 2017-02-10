@@ -1,15 +1,34 @@
 package database.model.user;
 
-public class User {
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
 
     public static final String ROLE_USER = "user";
     public static final String ROLE_ADMIN = "admin";
 
-    private long id;
+    @Column(name = "id", unique = true, nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "login", unique = true, nullable = false, length = 32)
     private String login;
+
+    @Column(name = "email", unique = true, nullable = false, length = 64)
     private String email;
+
+    @Column(name = "password", nullable = false, length = 32)
     private String password;
+
+    @Column(name = "role", nullable = false, length = 32)
     private String role;
+
+    public User() {
+    }
 
     public User(long id, String login, String email, String password, String role) {
         this.id = id;
@@ -62,6 +81,36 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        return id.equals(user.id) &&
+                login.equals(user.login) &&
+                email.equals(user.email) &&
+                password.equals(user.password) &&
+                role.equals(user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + login.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + role.hashCode();
+        return result;
+    }
+
 
     /**
      * Represents a user as a json object.
