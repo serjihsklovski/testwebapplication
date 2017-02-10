@@ -4,6 +4,7 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
   <title>Edit User</title>
   <link rel="stylesheet" href="../../css/node_modules/summarize.css/out/summarize.css">
 </head>
@@ -38,7 +39,7 @@
 
       <tr>
         <td><label for="is-admin">Is Admin:</label></td>
-        <td><input type="checkbox" name="is-admin" id="is-admin" ${user.role.equals("admin") ? "cheched=\"on\"" : ""}></td>
+        <td><input type="checkbox" name="is-admin" id="is-admin" ${user.role.equals("admin") ? "checked=\"on\"" : ""}></td>
       </tr>
 
       </tbody>

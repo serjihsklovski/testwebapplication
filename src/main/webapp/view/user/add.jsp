@@ -4,6 +4,7 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
   <title>Add New User</title>
   <link rel="stylesheet" href="../../css/node_modules/summarize.css/out/summarize.css">
 </head>

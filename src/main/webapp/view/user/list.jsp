@@ -4,6 +4,7 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
   <title>User List</title>
   <link rel="stylesheet" href="../../css/node_modules/summarize.css/out/summarize.css">
 </head>
