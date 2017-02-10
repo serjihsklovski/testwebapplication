@@ -23,103 +23,112 @@ public final class UserDaoMysqlImpl implements UserDao {
                 .append("`role` varchar(32) NOT null, ")
                 .append("PRIMARY KEY (`id`)) ENGINE = InnoDB;");
 
-        Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString());
+        Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString()));
     }
 
     @Override
     public void dropTableIfExists() throws SQLException {
         String sql = "DROP TABLE IF EXISTS `user`";
-        Executor.execUpdate(Connector.getConnection(), sql);
+
+        Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql));
     }
 
     @Override
     public long insert(User user) throws SQLException {
         String sql = String.format(
                 "INSERT INTO `user` (`login`, `email`, `password`, `role`) VALUES ('%s', '%s', '%s', '%s')",
-                user.getLogin(), user.getEmail(), user.getPassword(), user.getRole()
-        );
+                user.getLogin(), user.getEmail(), user.getPassword(), user.getRole());
 
-        user.setId(Executor.execInsert(Connector.getConnection(), sql));
-
-        return user.getId();
+        return Executor.execTransaction(() -> {
+            user.setId(Executor.execInsert(Connector.getConnection(), sql));
+            return user.getId();
+        });
     }
 
     @Override
     public User get(long id) throws SQLException {
-        String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `id` = %d", id);
+        String sql = String.format(
+                "SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `id` = %d", id);
 
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("role")
-                );
-            }
+        return Executor.execTransaction(() ->
+                Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                    if (resultSet.next()) {
+                        return new User(
+                                resultSet.getLong("id"),
+                                resultSet.getString("login"),
+                                resultSet.getString("email"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
+                        );
+                    }
 
-            return null;
-        });
+                    return null;
+                }));
     }
 
     @Override
     public List<User> getList() throws SQLException {
         String sql = "SELECT `id`, `login`, `email`, `password`, `role` FROM `user`";
 
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            List<User> users = new LinkedList<>();
+        return Executor.execTransaction(() ->
+                Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                    List<User> users = new LinkedList<>();
 
-            while (resultSet.next()) {
-                users.add(new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("role")
-                ));
-            }
+                    while (resultSet.next()) {
+                        users.add(new User(
+                                resultSet.getLong("id"),
+                                resultSet.getString("login"),
+                                resultSet.getString("email"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
+                        ));
+                    }
 
-            return users;
-        });
+                    return users;
+                }));
     }
 
     @Override
     public User getByLogin(String login) throws SQLException {
-        String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `login` = '%s'", login);
+        String sql = String.format(
+                "SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `login` = '%s'", login);
 
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("role")
-                );
-            }
+        return Executor.execTransaction(() ->
+                Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                    if (resultSet.next()) {
+                        return new User(
+                                resultSet.getLong("id"),
+                                resultSet.getString("login"),
+                                resultSet.getString("email"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
+                        );
+                    }
 
-            return null;
-        });
+                    return null;
+                }));
     }
 
     @Override
     public User getByEmail(String email) throws SQLException {
         String sql = String.format("SELECT `id`, `login`, `email`, `password`, `role` FROM `user` WHERE `email` = '%s'", email);
 
-        return Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
-            if (resultSet.next()) {
-                return new User(
-                        resultSet.getLong("id"),
-                        resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("role")
-                );
-            }
+        return Executor.execTransaction(() ->
+                Executor.execQuery(Connector.getConnection(), sql, (resultSet) -> {
+                    if (resultSet.next()) {
+                        return new User(
+                                resultSet.getLong("id"),
+                                resultSet.getString("login"),
+                                resultSet.getString("email"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
+                        );
+                    }
 
-            return null;
-        });
+                    return null;
+                }));
     }
 
     @Override
@@ -127,36 +136,47 @@ public final class UserDaoMysqlImpl implements UserDao {
         String sql = String.format("UPDATE `user` SET `login` = '%s', `email` = '%s', `password` = '%s', `role` = '%s' WHERE `id` = %d",
                 user.getLogin(), user.getEmail(), user.getPassword(), user.getRole(), user.getId());
 
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 
     @Override
     public boolean delete(long id) throws SQLException {
         String sql = String.format("DELETE FROM `user` WHERE `id` = %d", id);
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 
     @Override
     public boolean updateLogin(long id, String login) throws SQLException {
         String sql = String.format("UPDATE `user` SET `login` = '%s' WHERE `id` = %d", login, id);
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 
     @Override
     public boolean updateEmail(long id, String email) throws SQLException {
         String sql = String.format("UPDATE `user` SET `email` = '%s' WHERE `id` = %d", email, id);
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 
     @Override
     public boolean updatePassword(long id, String password) throws SQLException {
         String sql = String.format("UPDATE `user` SET `password` = '%s' WHERE `id` = %d", password, id);
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 
     @Override
     public boolean updateRole(long id, String role) throws SQLException {
         String sql = String.format("UPDATE `user` SET `role` = '%s' WHERE `id` = %d", role, id);
-        return Executor.execUpdate(Connector.getConnection(), sql) != 0;
+
+        return Executor.execTransaction(() ->
+                Executor.execUpdate(Connector.getConnection(), sql) != 0);
     }
 }
