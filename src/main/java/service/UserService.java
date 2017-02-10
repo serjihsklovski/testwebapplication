@@ -4,8 +4,8 @@ import database.dao.DaoFactory;
 import database.dao.user.UserDao;
 import database.model.user.User;
 import helper.ServiceProperties;
-import helper.executor.Executor;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -40,10 +40,12 @@ public class UserService {
      * @throws ServiceException
      */
     public long addUser(User user) throws ServiceException {
-        return Executor.execTransaction(() -> {
+        try {
             userDao.createTableIfNotExists();
             return userDao.insert(user);
-        });
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -54,11 +56,13 @@ public class UserService {
      * @throws ServiceException
      */
     public long addAdmin(User admin) throws ServiceException {
-        return Executor.execTransaction(() -> {
+        try {
             userDao.createTableIfNotExists();
             admin.setRole(User.ROLE_ADMIN);
             return userDao.insert(admin);
-        });
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -69,7 +73,19 @@ public class UserService {
      * @throws ServiceException
      */
     public User getUser(long id) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.get(id));
+        try {
+            return userDao.get(id);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public User getUserByLogin(String login) throws ServiceException {
+        try {
+            return userDao.getByLogin(login);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -79,10 +95,12 @@ public class UserService {
      * @throws ServiceException
      */
     public List<User> getUserList() throws ServiceException {
-        return Executor.execTransaction(() -> {
+        try {
             userDao.createTableIfNotExists();
             return userDao.getList();
-        });
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -93,7 +111,12 @@ public class UserService {
      * @throws ServiceException
      */
     public boolean updateUser(User user) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.update(user));
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.update(user);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -105,7 +128,12 @@ public class UserService {
      * @throws ServiceException
      */
     public boolean updateUserLogin(long userId, String userLogin) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.updateLogin(userId, userLogin));
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.updateLogin(userId, userLogin);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -117,31 +145,46 @@ public class UserService {
      * @throws ServiceException
      */
     public boolean updateUserEmail(long userId, String userEmail) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.updateEmail(userId, userEmail));
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.updateEmail(userId, userEmail);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
      * Updates user's password.
      *
      * @param userId user's id value
-     * @param password new user's password value
+     * @param userPassword new user's password value
      * @return was the operation successful?
      * @throws ServiceException
      */
-    public boolean updateUserPassword(long userId, String password) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.updatePassword(userId, password));
+    public boolean updateUserPassword(long userId, String userPassword) throws ServiceException {
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.updatePassword(userId, userPassword);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
      * Updates user's password.
      *
      * @param userId user's id value
-     * @param role new user's role value
+     * @param userRole new user's role value
      * @return was the operation successful?
      * @throws ServiceException
      */
-    public boolean updateUserRole(long userId, String role) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.updateRole(userId, role));
+    public boolean updateUserRole(long userId, String userRole) throws ServiceException {
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.updateRole(userId, userRole);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**
@@ -152,6 +195,11 @@ public class UserService {
      * @throws ServiceException
      */
     public boolean deleteUser(long userId) throws ServiceException {
-        return Executor.execTransaction(() -> userDao.delete(userId));
+        try {
+            userDao.createTableIfNotExists();
+            return userDao.delete(userId);
+        } catch (SQLException e) {
+            throw new ServiceException(e);
+        }
     }
 }
