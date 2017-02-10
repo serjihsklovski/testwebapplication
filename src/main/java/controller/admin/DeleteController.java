@@ -1,4 +1,4 @@
-package controller.user;
+package controller.admin;
 
 import service.ServiceException;
 import service.UserService;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/user/delete")
+@WebServlet("/admin/delete")
 public class DeleteController extends HttpServlet {
 
     @Override
@@ -32,6 +32,6 @@ public class DeleteController extends HttpServlet {
             }
         }
 
-        response.sendRedirect("/user/list");
+        response.sendRedirect("/admin");
     }
 }

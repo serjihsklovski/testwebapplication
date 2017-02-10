@@ -1,4 +1,4 @@
-package controller.user;
+package controller.admin;
 
 import service.UserService;
 import service.ServiceException;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/user/list")
+@WebServlet("/admin")
 public class ListController extends HttpServlet {
 
     @Override
@@ -26,7 +26,7 @@ public class ListController extends HttpServlet {
         try {
             List<User> users = UserService.getInstance().getUserList();
             request.setAttribute("users", users);
-            request.getRequestDispatcher("/view/user/list.jsp")
+            request.getRequestDispatcher("/view/admin/list.jsp")
                     .forward(request, response);
         } catch (ServiceException e) {
             e.printStackTrace();

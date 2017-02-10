@@ -1,4 +1,4 @@
-package controller.user;
+package controller.admin;
 
 import database.model.user.User;
 import service.ServiceException;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/user/edit")
+@WebServlet("/admin/edit")
 public class EditController extends HttpServlet {
 
     @Override
@@ -30,13 +30,13 @@ public class EditController extends HttpServlet {
                         .getUser(Long.valueOf(userIdParam));
 
                 request.setAttribute("user", user);
-                request.getRequestDispatcher("/view/user/edit.jsp")
+                request.getRequestDispatcher("/view/admin/edit.jsp")
                         .forward(request, response);
             } catch (NumberFormatException | ServiceException e) {
                 e.printStackTrace();
             }
         } else {
-            response.sendRedirect("/user/list");
+            response.sendRedirect("/admin");
         }
     }
 
@@ -85,9 +85,9 @@ public class EditController extends HttpServlet {
         }
 
         if (!done || (id == -1)) {
-            response.sendRedirect("/user/edit?id=" + id);
+            response.sendRedirect("/admin/edit?id=" + id);
         } else {
-            response.sendRedirect("/user/list");
+            response.sendRedirect("/admin");
         }
     }
 }

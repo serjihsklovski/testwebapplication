@@ -1,4 +1,4 @@
-package controller.user;
+package controller.admin;
 
 import database.model.user.User;
 import database.model.user.UserBuilder;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/user/add")
+@WebServlet("/admin/add")
 public class AddController extends HttpServlet {
 
     @Override
@@ -65,9 +65,9 @@ public class AddController extends HttpServlet {
         }
 
         if (done) {
-            response.sendRedirect("/user/list");
+            response.sendRedirect("/admin");
         } else {
-            response.sendRedirect("/user/add");
+            response.sendRedirect("/admin/add");
         }
     }
 }
