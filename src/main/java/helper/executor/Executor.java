@@ -1,15 +1,13 @@
 package helper.executor;
 
-import service.ServiceException;
 import helper.Connector;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.concurrent.Callable;
 
-public class Executor {
+public final class Executor {
 
     public static int execUpdate(Connection conn, String upd) throws SQLException {
         int affectedRowsCount;
@@ -45,27 +43,23 @@ public class Executor {
         return value;
     }
 
-    public static <T> T execTransaction(Callable<T> transactionBody) throws ServiceException {
-        Connection conn = Connector.getConnection();
+    public static <T> T execTransaction(TransactionBody<T> transactionBody) throws SQLException {
         T value;
 
-        try {
-            conn.setAutoCommit(false);
-            value = transactionBody.call();
-            conn.commit();
-
-            return value;
-        } catch (Exception e) {
+        try (Connection conn = Connector.getConnection()) {
             try {
-                conn.rollback();
-            } catch (SQLException ignored) {
-            }
+                conn.setAutoCommit(false);
+                value = transactionBody.call();
+                conn.commit();
 
-            throw new ServiceException(e);
-        } finally {
-            try {
-                conn.close();
-            } catch (Exception ignored) {
+                return value;
+            } catch (SQLException e) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ignored) {
+                }
+
+                throw e;
             }
         }
     }
