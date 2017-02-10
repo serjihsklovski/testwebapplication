@@ -38,15 +38,15 @@
         <td>${user.email}</td>
         <td>${user.password}</td>
         <td>${user.role}</td>
-        <td><a class="button good" href="${pageContext.request.contextPath}/user/edit?id=${user.id}">Edit</a></td>
-        <td><a class="button bad" href="${pageContext.request.contextPath}/user/delete?id=${user.id}">Delete</a></td>
+        <td><a class="button good" href="${pageContext.request.contextPath}/admin/edit?id=${user.id}">Edit</a></td>
+        <td><a class="button bad" href="${pageContext.request.contextPath}/admin/delete?id=${user.id}">Delete</a></td>
       </tr>
     </c:forEach>
 
     </tbody>
   </table>
 
-  <a class="button" href="${pageContext.request.contextPath}/user/add">Add new user</a>
+  <a class="button" href="${pageContext.request.contextPath}/admin/add">Add new user</a>
 </main>
 
 </body>

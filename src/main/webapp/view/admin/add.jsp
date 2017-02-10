@@ -14,7 +14,7 @@
 <main>
   <h1>Add New User</h1>
 
-  <form action="${pageContext.request.contextPath}/user/add" method="post">
+  <form action="${pageContext.request.contextPath}/admin/add" method="post">
     <table>
       <caption>Fill in the application form:</caption>
 
@@ -46,7 +46,7 @@
     <input type="submit" value="Add">
   </form>
 
-  <a class="button" href="${pageContext.request.contextPath}/user/list">Back</a>
+  <a class="button" href="${pageContext.request.contextPath}/admin">Back</a>
 </main>
 
 </body>
