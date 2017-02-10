@@ -22,7 +22,7 @@ public class AddController extends HttpServlet {
 
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("UTF-8");
-        request.getRequestDispatcher("/view/user/add.jsp")
+        request.getRequestDispatcher("/view/admin/add.jsp")
                 .forward(request, response);
     }
 
