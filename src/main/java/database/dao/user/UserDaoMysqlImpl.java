@@ -21,7 +21,9 @@ public final class UserDaoMysqlImpl implements UserDao {
                 .append("`email` varchar(64) NOT null UNIQUE, ")
                 .append("`password` varchar(32) NOT null, ")
                 .append("`role` varchar(32) NOT null, ")
-                .append("PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+                .append("PRIMARY KEY (`id`)) ")
+                .append("ENGINE = InnoDB ")
+                .append("DEFAULT CHARACTER SET = utf8;");
 
         Executor.execTransaction(() ->
                 Executor.execUpdate(Connector.getConnection(), sqlBuilder.toString()));
