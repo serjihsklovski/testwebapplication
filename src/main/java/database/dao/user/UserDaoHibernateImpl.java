@@ -155,7 +155,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public User getByEmail(String email) throws SQLException {
-        String hql = "FROM User WHERE login = :login";
+        String hql = "FROM User WHERE email = :email";
         User user = null;
         Session session = HibernateSessionFactory
                 .getInstance().getSessionFactory().openSession();
