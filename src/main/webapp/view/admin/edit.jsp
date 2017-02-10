@@ -16,7 +16,7 @@
 
   <%--@elvariable id="user" type="database.model.user.User"--%>
 
-  <form action="/user/edit" method="post">
+  <form action="${pageContext.request.contextPath}/user/edit" method="post">
     <table>
       <caption>Editing of ${user.login}:</caption>
 
@@ -49,7 +49,7 @@
     <input type="submit" value="Ok">
   </form>
 
-  <a class="button" href="/user/list">Back</a>
+  <a class="button" href="${pageContext.request.contextPath}/user/list">Back</a>
 </main>
 
 </body>
