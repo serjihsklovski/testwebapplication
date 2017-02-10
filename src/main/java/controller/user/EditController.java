@@ -12,21 +12,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/user/edit")
-public class EditServlet extends HttpServlet {
+public class EditController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
         String userIdParam = request.getParameter("id");
 
         if (userIdParam != null) {
             try {
-                User user = UserService.getInstance().getUser(Long.valueOf(userIdParam));
+                User user = UserService.getInstance()
+                        .getUser(Long.valueOf(userIdParam));
+
                 request.setAttribute("user", user);
-                request.getRequestDispatcher("/view/user/edit.jsp").forward(request, response);
+                request.getRequestDispatcher("/view/user/edit.jsp")
+                        .forward(request, response);
             } catch (NumberFormatException | ServiceException e) {
                 e.printStackTrace();
             }
@@ -36,11 +41,12 @@ public class EditServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
-        response.setCharacterEncoding("UTF-8");
 
         String idParam = request.getParameter("id");
         String loginParam = request.getParameter("login");
@@ -63,7 +69,9 @@ public class EditServlet extends HttpServlet {
                 id = Long.valueOf(idParam);
                 User user = UserService.getInstance().getUser(id);
 
-                if ((loginParam != null) && (emailParam != null) && (passwordParam != null)) {
+                if ((loginParam != null) && (emailParam != null) &&
+                        (passwordParam != null)) {
+
                     user.setLogin(loginParam);
                     user.setEmail(emailParam);
                     user.setPassword(passwordParam);

@@ -16,15 +16,18 @@ import java.util.List;
 public class ListController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("UTF-8");
 
         try {
             List<User> users = UserService.getInstance().getUserList();
             request.setAttribute("users", users);
-            request.getRequestDispatcher("/view/user/list.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/user/list.jsp")
+                    .forward(request, response);
         } catch (ServiceException e) {
             e.printStackTrace();
         }

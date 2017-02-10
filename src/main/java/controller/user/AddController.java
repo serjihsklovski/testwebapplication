@@ -16,17 +16,22 @@ import java.io.IOException;
 public class AddController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=utf-8");
-        request.getRequestDispatcher("/view/user/add.jsp").forward(request, response);
+        request.setCharacterEncoding("UTF-8");
+        request.getRequestDispatcher("/view/user/add.jsp")
+                .forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
         String userLogin = request.getParameter("login");
@@ -41,7 +46,9 @@ public class AddController extends HttpServlet {
 
         boolean done = false;
 
-        if ((userLogin != null) && (userEmail != null) && (userPassword != null)) {
+        if ((userLogin != null) && (userEmail != null) &&
+                (userPassword != null)) {
+
             User user = new UserBuilder()
                     .setLogin(userLogin)
                     .setEmail(userEmail)
