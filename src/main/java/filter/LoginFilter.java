@@ -17,6 +17,14 @@ public class LoginFilter extends AbstractFilter {
                          FilterChain chain)
             throws IOException, ServletException {
 
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+
+        if (request.getRequestURI().endsWith(".css")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         HttpSession session = request.getSession(false);
         String loginUri = request.getContextPath() + "/login";
 
