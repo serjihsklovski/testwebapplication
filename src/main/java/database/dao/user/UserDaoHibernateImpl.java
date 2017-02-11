@@ -5,7 +5,6 @@ import helper.HibernateSessionFactory;
 import org.hibernate.Session;
 
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
         }
 
         user.setId(id);
-        
+
         return id;
     }
 
