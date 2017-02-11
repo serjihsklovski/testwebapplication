@@ -1,6 +1,7 @@
 package controller;
 
 import database.model.user.User;
+import service.AccountService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,9 +20,14 @@ public class HomeController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
-        User user = (User) request.getSession().getAttribute("user");
+        User user = null;
+
+        if ((boolean) request.getAttribute("loggedIn")) {
+            user = (User) request.getSession().getAttribute("user");
+        }
 
         request.setAttribute("user", user);
-        request.getRequestDispatcher("/view/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/home.jsp")
+                .forward(request, response);
     }
 }
