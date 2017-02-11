@@ -46,7 +46,11 @@
     <input type="submit" value="Add">
   </form>
 
-  <a class="button" href="${pageContext.request.contextPath}/admin">Back</a>
+  <ul>
+    <li><a class="button" href="${pageContext.request.contextPath}/admin">Back</a></li>
+    <li><li><a class="button" href="${pageContext.request.contextPath}/home">Home Page</a></li></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+  </ul>
 </main>
 
 </body>

@@ -17,9 +17,13 @@
   <%--@elvariable id="user" type="database.model.user.User"--%>
   <h2>Hi, ${user.login}!</h2>
 
-  <c:if test="${user.role.equals('admin')}">
-    <a href="${pageContext.request.contextPath}/admin">Admin Panel</a>
-  </c:if>
+  <ul>
+    <c:if test="${user.role.equals('admin')}">
+      <li><a href="${pageContext.request.contextPath}/admin">Admin Panel</a></li>
+    </c:if>
+
+    <li><a class="button" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+  </ul>
 </main>
 
 </body>

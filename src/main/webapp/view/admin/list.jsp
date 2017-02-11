@@ -46,7 +46,11 @@
     </tbody>
   </table>
 
-  <a class="button" href="${pageContext.request.contextPath}/admin/add">Add new user</a>
+  <ul>
+    <li><a class="button" href="${pageContext.request.contextPath}/admin/add">Add new user</a></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/home">Home Page</a></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+  </ul>
 </main>
 
 </body>

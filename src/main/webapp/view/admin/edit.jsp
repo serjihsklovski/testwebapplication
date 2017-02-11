@@ -49,7 +49,11 @@
     <input type="submit" value="Ok">
   </form>
 
-  <a class="button" href="${pageContext.request.contextPath}/admin">Back</a>
+  <ul>
+    <li><a class="button" href="${pageContext.request.contextPath}/home">Home Page</a></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/admin">Back</a></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+  </ul>
 </main>
 
 </body>

@@ -14,7 +14,11 @@
 <main>
   <h1>409 Unauthorized</h1>
   <p>You do not have access to this page! Ask the admin to give you access.</p>
-  <a href="${pageContext.request.contextPath}/home">Home Page</a>
+
+  <ul>
+    <li><a class="button" href="${pageContext.request.contextPath}/home">Home Page</a></li>
+    <li><a class="button" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+  </ul>
 </main>
 
 </body>
