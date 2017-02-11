@@ -1,10 +1,10 @@
 package controller;
 
+import service.AccountService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/logout")
@@ -17,7 +17,14 @@ public class LogoutController extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("UTF-8");
 
-        request.getSession().invalidate();
+        HttpSession httpSession = request.getSession();
+        String sessionId = httpSession.getId();
+
+        AccountService.getInstance().removeHttpSession(sessionId);
+
+        Cookie sessionIdCookie = new Cookie("sessionId", null);
+
+        response.addCookie(sessionIdCookie);
         response.sendRedirect("/home");
     }
 }
