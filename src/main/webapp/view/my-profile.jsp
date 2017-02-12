@@ -59,7 +59,7 @@
       </c:otherwise>
     </c:choose>
 
-    <c:if test="${user.role.equals('admin')}">
+    <c:if test="${loggedIn && user.role.equals('admin')}">
       <li><a href="${pageContext.request.contextPath}/admin">Admin Panel</a></li>
     </c:if>
   </ul>
