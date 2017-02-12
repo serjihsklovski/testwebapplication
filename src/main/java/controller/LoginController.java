@@ -1,14 +1,13 @@
 package controller;
 
 import database.model.user.User;
+import service.AccountService;
 import service.ServiceException;
 import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,12 +38,28 @@ public class LoginController extends HttpServlet {
 
         List<String> errors = new LinkedList<>();
 
+        if ((boolean) request.getAttribute("loggedIn")) {
+            AccountService.getInstance().removeHttpSession(request.getSession().getId());
+            Cookie sessionIdCookie = new Cookie("sessionId", null);
+            response.addCookie(sessionIdCookie);
+        }
+
         try {
             User user = UserService.getInstance().getUserByLogin(loginParam);
 
             if ((user != null) && user.getPassword().equals(passwordParam)) {
-                request.getSession().setAttribute("user", user);
+                HttpSession httpSession = request.getSession();
+
+                httpSession.setAttribute("user", user);
+                AccountService.getInstance().putHttpSession(httpSession);
+
+                Cookie sessionIdCookie = new Cookie("sessionId", httpSession.getId());
+
+                sessionIdCookie.setMaxAge(60 * 60 * 24 * 365);
+
+                response.addCookie(sessionIdCookie);
                 response.sendRedirect(request.getContextPath() + "/home");
+
                 return;
             } else {
                 errors.add("Wrong combination of Login-Password");
