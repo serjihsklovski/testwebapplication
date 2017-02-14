@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class UserDaoMysqlImpl implements UserDao {
+public final class UserDaoJdbcImpl implements UserDao {
 
     @Override
     public void createTableIfNotExists() throws SQLException {
