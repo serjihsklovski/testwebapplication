@@ -16,6 +16,7 @@ import java.util.List;
 public class ListController extends HttpServlet {
 
     private static final String VIEW_ADMIN_LIST = "/view/admin/list.jsp";
+    private static final String VIEW_UNEXPECTED_ERROR = "/view/error/unexpected.jsp";
     private static final String PARAM_USERS = "users";
 
     @Override
@@ -29,7 +30,9 @@ public class ListController extends HttpServlet {
             request.getRequestDispatcher(VIEW_ADMIN_LIST)
                     .forward(request, response);
         } catch (ServiceException e) {
-            e.printStackTrace();
+            e.printStackTrace();    // todo: print stack trace in log
+            request.getRequestDispatcher(VIEW_UNEXPECTED_ERROR)
+                    .forward(request, response);
         }
     }
 }
