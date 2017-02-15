@@ -17,7 +17,7 @@ public class ListController extends HttpServlet {
 
     private static final String VIEW_ADMIN_LIST = "/view/admin/list.jsp";
     private static final String VIEW_UNEXPECTED_ERROR = "/view/error/unexpected.jsp";
-    private static final String PARAM_USERS = "users";
+    private static final String ATTR_USERS = "users";
 
     @Override
     protected void doGet(HttpServletRequest request,
@@ -26,7 +26,7 @@ public class ListController extends HttpServlet {
 
         try {
             List<User> users = UserService.getInstance().getUserList();
-            request.setAttribute(PARAM_USERS, users);
+            request.setAttribute(ATTR_USERS, users);
             request.getRequestDispatcher(VIEW_ADMIN_LIST)
                     .forward(request, response);
         } catch (ServiceException e) {
