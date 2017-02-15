@@ -15,18 +15,18 @@ import java.util.List;
 @WebServlet("/admin")
 public class ListController extends HttpServlet {
 
+    private static final String VIEW_ADMIN_LIST = "/view/admin/list.jsp";
+    private static final String PARAM_USERS = "users";
+
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=utf-8");
-        request.setCharacterEncoding("UTF-8");
-
         try {
             List<User> users = UserService.getInstance().getUserList();
-            request.setAttribute("users", users);
-            request.getRequestDispatcher("/view/admin/list.jsp")
+            request.setAttribute(PARAM_USERS, users);
+            request.getRequestDispatcher(VIEW_ADMIN_LIST)
                     .forward(request, response);
         } catch (ServiceException e) {
             e.printStackTrace();
