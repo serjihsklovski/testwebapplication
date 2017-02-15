@@ -1,16 +1,16 @@
 package database.dao.user;
 
-import database.dao.AbstractDao;
+import database.dao.Dao;
 import database.model.user.User;
 
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Takes needed common CRUD methods from AbstractDao by overriding.
+ * Takes needed common CRUD methods from Dao by overriding.
  * Defines specific CRUD methods for User data set
  */
-public interface UserDao extends AbstractDao<User> {
+public interface UserDao extends Dao<User> {
 
     @Override
     void createTableIfNotExists() throws SQLException;

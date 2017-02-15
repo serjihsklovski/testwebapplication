@@ -1,9 +1,8 @@
 package service;
 
-import database.dao.DaoFactory;
+import database.factory.UserDaoFactory;
 import database.dao.user.UserDao;
 import database.model.user.User;
-import helper.ServiceProperties;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,17 +10,10 @@ import java.util.List;
 public class UserService {
 
     private static UserService instance;
-
-    // daos
     private UserDao userDao;
 
-    private UserService() throws ServiceException {
-        try {
-            userDao = DaoFactory.createDao(ServiceProperties.getInstance()
-                    .getUserDaoImplementationClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            throw new ServiceException(e);
-        }
+    private UserService() {
+        userDao = UserDaoFactory.getInstance().getDao();
     }
 
     public static UserService getInstance() throws ServiceException {

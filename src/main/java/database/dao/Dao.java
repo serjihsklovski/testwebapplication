@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <T> using DataSet class
  */
-public interface AbstractDao<T> {
+public interface Dao<T> {
 
     /**
      * Creates the table related with dao if it does not exist.
